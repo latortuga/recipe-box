@@ -46,15 +46,15 @@ RecipeIngredient
 - name
 
 Ingredient
-- shopping_list_id
+- list_id
 - name
 
 
-ShoppingList
+List
 - archived_at
 
-ListItem
-- shopping_list_id
+Item
+- list_id
 - active
 
 
