@@ -10,13 +10,29 @@ var App = React.createClass({
 
 var List = React.createClass({
   render: function() {
+    var listItems = this.props.items.map(function(listItem) {
+      return (
+        <ListItem body={listItem.body} />
+        );
+    })
     return (
       <div>
         <h1>The List</h1>
         <ul>
-          <li>Item1</li>
+          {listItems}
         </ul>
       </div>
+      );
+  }
+});
+
+var ListItem = React.createClass({
+  render: function() {
+    return (
+      <li>
+        <input type="checkbox" />
+        {this.props.body}
+      </li>
       );
   }
 });
