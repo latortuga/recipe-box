@@ -15,6 +15,7 @@ gem 'puma'
 gem 'devise'
 
 gem 'react-rails', '~> 1.0.0.pre', github: 'reactjs/react-rails'
+gem 'foundation-rails'
 
 group :development, :test do
   gem 'pry-rails'
