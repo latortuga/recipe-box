@@ -13,6 +13,43 @@
 </head>
 
 <body>
-  <%= yield %>
+  <div class="row">
+    <div class="large-6 columns">
+      <h1>Recipe Box</h1>
+    </div>
+    <div class="large-6 columns">
+      <div class="nav-bar right">
+       <ul class="button-group">
+         <li><a href="#" class="button">Plan</a></li>
+         <li><a href="#" class="button">Shop</a></li>
+         <li><a href="#" class="button">Cook</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="row">
+    <div class="large-9 columns" role="content">
+      <%= yield %>
+    </div>
+  </div>
+
+  <footer class="row">
+    <div class="large-12 columns">
+      <hr/>
+      <div class="row">
+        <div class="large-6 columns">
+          <p>Made in Nebraksa.</p>
+        </div>
+        <div class="large-6 columns">
+          <ul class="inline-list right">
+            <li><a href="http://unabridgedsoftware.com">Unabridged Software</a></li>
+            <li><a href="https://twitter.com/latortuga">Twitter</a></li>
+            <li><a href="https://github.com/latortuga">Github</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

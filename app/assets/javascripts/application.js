@@ -17,5 +17,6 @@
 //= require react
 //= require react_ujs
 //= require_tree .
+//= require_self
 
 $(function(){ $(document).foundation(); });
