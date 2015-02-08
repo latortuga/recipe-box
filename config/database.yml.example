@@ -1,0 +1,17 @@
+common: &common
+  adapter: postgresql
+  encoding: utf8
+  pool: 5
+  username: user
+  password: password
+
+development:
+  <<: *common
+  database: recipe_box_development
+
+test: &test
+  <<: *common
+  database: recipe_box_test
+  # This is for an in-memory sqlite db which just screams.
+  #adapter: sqlite3
+  #database: ":memory"
