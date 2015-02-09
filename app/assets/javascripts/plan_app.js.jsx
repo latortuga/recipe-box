@@ -1,46 +1,40 @@
-var App = React.createClass({
+var PlanApp = React.createClass({
   getInitialState: function() {
     return {chosenRecipe: null};
   },
-  OnRecipeChosen: function(recipe) {
+  handleRecipeSelected: function(recipe) {
     this.setState({chosenRecipe: recipe})
   },
   render: function() {
     return (
       <div>
-        <List shown={this.state.chosenRecipe == null} recipes={this.props.recipes} dateStr={this.props.date_str} chooseRecipe={this.OnRecipeChosen} />
-        <Chooser shown={this.state.chosenRecipe != null} recipe={this.state.chosenRecipe} chooseRecipe={this.OnRecipeChosen} />
+        <WeeklyList recipes={this.props.recipes} dateStr={this.props.date_str} chooseRecipe={this.handleRecipeSelected} />
+        <RecipeChooser recipe={this.state.chosenRecipe} chooseRecipe={this.OnRecipeChosen} />
       </div>
       );
   }
 });
 
-var List = React.createClass({
-  chooseItem: function(item) {
+var WeeklyList = React.createClass({
+  handleItemChosen: function(item) {
     this.props.chooseRecipe(item);
   },
   render: function() {
-    if (!this.props.shown) {
-      return null;
-    }
-    var recipeChosenCallback = this.chooseItem;
     var makeListItem = function(listItem) {
-      return <ListItem chooseRecipe={recipeChosenCallback} item={listItem} />
-    }
+      return <WeeklyListItem chooseRecipe={this.handleItemChosen} item={listItem} />
+    }.bind(this)
 
     var listItems = this.props.recipes.map(makeListItem)
     return (
       <div>
         <h2>{this.props.dateStr}</h2>
-        <ul>
-          {listItems}
-        </ul>
+        <ul> {listItems} </ul>
       </div>
       );
   }
 });
 
-var ListItem = React.createClass({
+var WeeklyListItem = React.createClass({
   chooseItem: function() {
     this.props.chooseRecipe(this.props.item);
   },
@@ -53,7 +47,10 @@ var ListItem = React.createClass({
   }
 });
 
-var Chooser = React.createClass({
+var RecipeChooser = React.createClass({
+  getInitialState: function() {
+    return {recipe: {}};
+  },
   selectRecipe: function(choice) {
   },
   goBackHandler: function() {
@@ -64,13 +61,8 @@ var Chooser = React.createClass({
     $(document).foundation('tab');
   },
   render: function() {
-    if (!this.props.shown) {
-      return null;
-    }
     return (
       <div className="row">
-        <h3>{this.props.recipe.date} - {this.props.recipe.name}</h3>
-        <button className="button" onClick={this.goBackHandler}>Back</button>
         <ul className="tabs" data-tab>
           <li className="tab-title active"><a href='#searchPane'>Search</a></li>
           <li className="tab-title"><a href='#popularPane'>Popular</a></li>
