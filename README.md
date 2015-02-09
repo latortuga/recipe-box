@@ -5,7 +5,7 @@ for kitchen/meal planning.
 
 
 ## Use Case 1: Meal Planning
-Choose or create 6-7 recipes for weekdays
+Pick recipes for weekdays from existing records or new entry.
 
 ## Use Case 2: Make Grocery List
 Take meal list and copy all items to a grocery list
