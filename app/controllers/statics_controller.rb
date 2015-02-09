@@ -16,6 +16,8 @@ class StaticsController < ApplicationController
   end
 
   def shop
+    @data = {
+    }.to_json
   end
 
   def cook
