@@ -1,5 +1,5 @@
 class StaticsController < ApplicationController
-  def index
+  def plan
     @recipes = []
     1.upto(7).each do |i|
       date = Date.today + i.days - 1
@@ -13,5 +13,11 @@ class StaticsController < ApplicationController
 
     @recipe = {
     }.to_json
+  end
+
+  def shop
+  end
+
+  def cook
   end
 end
