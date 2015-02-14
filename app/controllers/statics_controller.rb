@@ -17,12 +17,7 @@ class StaticsController < ApplicationController
 
   def shop
     @data = {
-      items: [
-        {body: 'Eggs', complete: false},
-        {body: 'Milk', complete: false},
-        {body: '1 lb beef', complete: false},
-        {body: '1 lb pork', complete: true},
-      ],
+      items: Item.all,
       url: items_path,
       poll_interval: 5000,
     }.to_json
