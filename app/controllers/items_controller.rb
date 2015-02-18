@@ -1,33 +1,43 @@
 class ItemsController < ApplicationController
-  respond_to :json
-
   def index
-    respond_with Item.unarchived
+    render json: Item.unarchived
   end
 
   def create
-    respond_with Item.create(item_params)
+    render json: Item.create(item_params)
   end
 
   def update
     @item = Item.find(params[:item][:id])
     @item.update(item_params)
 
-    respond_with @item
+    render json: @item
   end
 
   def archive
     @item = Item.find(params[:item][:id])
-    @item.update(archived_at: DateTime.now)
+    @item.archive
 
-    respond_with @item
+    render json: @item
   end
 
-  def archive
+  def unarchive
     @item = Item.find(params[:item][:id])
-    @item.update(archived_at: DateTime.now)
+    @item.unarchive
 
-    respond_with @item
+    render json: @item
+  end
+
+  def archive_complete
+    Item.archive_complete
+
+    render json: Item.unarchived
+  end
+
+  def archive_all
+    Item.archive_all
+
+    render json: Item.unarchived
   end
 
   private

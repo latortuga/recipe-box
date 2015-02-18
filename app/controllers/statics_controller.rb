@@ -17,9 +17,11 @@ class StaticsController < ApplicationController
 
   def shop
     @data = {
-      items: Item.all,
-      url: items_path,
-      poll_interval: 5000,
+      items: Item.unarchived,
+      url: items_url,
+      archive_complete_url: archive_complete_items_url,
+      archive_all_url: archive_all_items_url,
+      poll_interval: 10_000,
     }.to_json
   end
 

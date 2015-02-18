@@ -12,32 +12,58 @@ var ShopApp = React.createClass({
       dataType: 'json',
       success: function(data) {
         this.setState({items: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
   },
   handleAddItem: function(item) {
+    var newKey = (new Date()).toString();
+    item.id = newKey;
     var items = this.state.items;
-    var newItems = items.concat([item]);
+    var newItems = [item].concat(items);
     this.setState({items: newItems});
     $.ajax({
       url: this.props.url,
       data: {item: item},
       dataType: 'json',
       method: 'POST',
-      error: function(xhr, status, err) {
-        this.setState({items: items});
+      success: function(data, status, xhr) {
+        this.loadItemsFromServer();
       }.bind(this)
+    });
+  },
+  handleClearDone: function() {
+    $.ajax({
+      url: this.props.archive_complete_url,
+      dataType: 'json',
+      method: 'PUT',
+      success: function(data, status) {
+        this.setState({items: data})
+      }.bind(this),
+    });
+  },
+  handleClearAll: function() {
+    $.ajax({
+      url: this.props.archive_all_url,
+      dataType: 'json',
+      method: 'PUT',
+      success: function(data, status) {
+        this.setState({items: []})
+      }.bind(this),
     });
   },
   render: function() {
     return (
       <div>
         <h3>Shopping List</h3>
-        <NewItemForm onAddItem={this.handleAddItem} />
-        <ShoppingList url={this.props.url} items={this.state.items} />
+        <NewItemForm
+          onAddItem={this.handleAddItem}
+          />
+        <ShoppingList
+          url={this.props.url}
+          items={this.state.items}
+          onClearDone={this.handleClearDone}
+          onClearAll={this.handleClearAll}
+          />
       </div>
       );
   }
@@ -47,9 +73,16 @@ var ShoppingList = React.createClass({
   getInitialState: function() {
     return {items: this.props.items};
   },
-  handleClearDone: function() {
+  componentWillReceiveProps: function(newProps) {
+    this.setState({items: newProps.items});
   },
-  handleClearAll: function() {
+  handleClearDone: function(e) {
+    e.preventDefault();
+    this.props.onClearDone();
+  },
+  handleClearAll: function(e) {
+    e.preventDefault();
+    this.props.onClearAll();
   },
   handleUpdateItem: function(item) {
     $.ajax({
@@ -65,9 +98,9 @@ var ShoppingList = React.createClass({
   render: function() {
     var makeShoppingListItem = function(item) {
       return <ShoppingListItem onItemUpdate={this.handleUpdateItem} key={item.id} item={item} />
-    }.bind(this)
+    }.bind(this);
 
-    var listItems = this.state.items.map(makeShoppingListItem)
+    var listItems = this.state.items.map(makeShoppingListItem);
     return (
       <div>
         <ul style={{listStyleType: 'none'}}>
