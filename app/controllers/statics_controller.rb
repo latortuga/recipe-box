@@ -26,5 +26,12 @@ class StaticsController < ApplicationController
   end
 
   def cook
+    @data = {
+      recipes: [
+        {id: 1, name: 'Whole Chicken'},
+        {id: 2, name: 'Steak'},
+        {id: 3, name: 'Brinner'},
+      ],
+    }.to_json
   end
 end
