@@ -76,9 +76,16 @@ var WeeklyList = React.createClass({
 
     var listItems = this.props.recipes.map(makeListItem)
     return (
-      <div>
-        <h2>{this.props.dateStr}</h2>
-        <ul> {listItems} </ul>
+      <div className="row">
+        <div className="large-12 columns">
+          <h2>{this.props.dateStr}</h2>
+        </div>
+        <div className="large-6 columns">
+          <ul> {listItems} </ul>
+        </div>
+        <div className="panel large-6 columns right">
+          <RecipeInspector recipe={this.props.chosenRecipe} />
+        </div>
       </div>
       );
   }
@@ -109,15 +116,17 @@ var RecipeChooser = React.createClass({
   render: function() {
     return (
       <div className="row">
-        <ul className="tabs" data-tab>
-          <li className="tab-title active"><a href='#searchPane'>Search</a></li>
-          <li className="tab-title"><a href='#popularPane'>Popular</a></li>
-          <li className="tab-title"><a href='#newPane'>New</a></li>
-        </ul>
-        <div className="tabs-content">
-          <RecipeSearch />
-          <PopularChoices />
-          <RecipeForm onRecipeCreated={this.props.onRecipeCreated} />
+        <div className="large-12 columns">
+          <ul className="tabs" data-tab>
+            <li className="tab-title active"><a href='#searchPane'>Search</a></li>
+            <li className="tab-title"><a href='#popularPane'>Popular</a></li>
+            <li className="tab-title"><a href='#newPane'>New</a></li>
+          </ul>
+          <div className="tabs-content">
+            <RecipeSearch />
+            <PopularChoices />
+            <RecipeForm onRecipeCreated={this.props.onRecipeCreated} />
+          </div>
         </div>
       </div>
       );
