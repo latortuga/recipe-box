@@ -1,6 +1,6 @@
 var PlanApp = React.createClass({
   getInitialState: function() {
-    return {chosenRecipe: this.props.recipes[0]};
+    return {recipes: this.props.recipes, chosenRecipe: this.props.recipes[0]};
   },
   handleRecipeSelected: function(recipe) {
     this.setState({chosenRecipe: recipe})
@@ -12,26 +12,66 @@ var PlanApp = React.createClass({
   componentDidUpdate: function() {
     this.updateFoundationTabs();
   },
+  componentWillMount: function() {
+    this.loadRecipes();
+  },
   componentDidMount: function() {
     this.updateFoundationTabs();
+  },
+  handleRecipeCreated: function() {
+    this.loadRecipes();
+  },
+  handleRecipeCreated: function(newRecipe) {
+    $.ajax({
+      url: this.props.recipes_url,
+      method: 'POST',
+      dataType: 'json',
+      data: { recipe: newRecipe },
+      success: function() {
+        this.loadRecipes();
+      }.bind(this),
+    });
+  },
+  loadRecipes: function() {
+    $.ajax({
+      url: this.props.recipes_url,
+      dataType: 'json',
+      success: function(data) {
+        this.setState({
+          recipes: data,
+          chosenRecipe: this.state.chosenRecipe,
+        });
+      }.bind(this)
+    });
   },
   render: function() {
     return (
       <div>
-        <WeeklyList recipes={this.props.recipes} dateStr={this.props.date_str} chooseRecipe={this.handleRecipeSelected} chosenRecipe={this.state.chosenRecipe} />
-        <RecipeChooser recipe={this.state.chosenRecipe} chooseRecipe={this.OnRecipeChosen} />
+        <WeeklyList
+          recipes={this.state.recipes}
+          dateStr={this.props.date_str}
+          onRecipeChosen={this.handleRecipeSelected}
+          chosenRecipe={this.state.chosenRecipe} />
+
+        <RecipeChooser
+          create_recipe_url={this.props.recipes_url}
+          recipe={this.state.chosenRecipe}
+          onRecipeCreated={this.handleRecipeCreated} />
       </div>
       );
   }
 });
 
 var WeeklyList = React.createClass({
-  handleItemChosen: function(item) {
-    this.props.chooseRecipe(item);
-  },
   render: function() {
     var makeListItem = function(listItem) {
-      return <WeeklyListItem key={listItem.id} chosen={this.props.chosenRecipe.id == listItem.id} chooseRecipe={this.handleItemChosen} item={listItem} />
+      return (
+        <WeeklyListItem
+          key={listItem.id}
+          chosen={this.props.chosenRecipe.id == listItem.id}
+          onRecipeChosen={this.props.onRecipeChosen}
+          item={listItem} />
+        );
     }.bind(this)
 
     var listItems = this.props.recipes.map(makeListItem)
@@ -45,8 +85,9 @@ var WeeklyList = React.createClass({
 });
 
 var WeeklyListItem = React.createClass({
-  chooseItem: function() {
-    this.props.chooseRecipe(this.props.item);
+  handleItemChosen: function(e) {
+    e.preventDefault();
+    this.props.onRecipeChosen(this.props.item);
   },
   render: function() {
     var spanStyle = {fontWeight: 'normal'};
@@ -54,7 +95,7 @@ var WeeklyListItem = React.createClass({
       spanStyle.fontWeight = 'bold';
     }
     return (
-      <li onClick={this.chooseItem}>
+      <li onClick={this.handleItemChosen}>
         <span style={spanStyle}>{this.props.item.name}</span>
       </li>
       );
@@ -64,11 +105,6 @@ var WeeklyListItem = React.createClass({
 var RecipeChooser = React.createClass({
   getInitialState: function() {
     return {recipe: {}};
-  },
-  selectRecipe: function(choice) {
-  },
-  goBackHandler: function() {
-    this.props.chooseRecipe(null);
   },
   render: function() {
     return (
@@ -81,7 +117,7 @@ var RecipeChooser = React.createClass({
         <div className="tabs-content">
           <RecipeSearch />
           <PopularChoices />
-          <RecipeForm />
+          <RecipeForm onRecipeCreated={this.props.onRecipeCreated} />
         </div>
       </div>
       );
@@ -93,14 +129,13 @@ var RecipeForm = React.createClass({
     e.preventDefault();
     var name = this.refs.name.getDOMNode().value.trim();
     var desc = this.refs.description.getDOMNode().value;
-    if (!name || !desc) {
+    if (!name) {
       return;
     }
 
-    // TODO save recipe on server
+    this.props.onRecipeCreated({ name: name, description: desc });
     this.refs.name.getDOMNode().value = '';
     this.refs.description.getDOMNode().value = '';
-    // TODO close new form
   },
   render: function() {
     return (
