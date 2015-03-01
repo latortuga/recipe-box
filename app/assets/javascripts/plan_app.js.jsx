@@ -1,6 +1,6 @@
 var PlanApp = React.createClass({
   getInitialState: function() {
-    return {chosenRecipe: null};
+    return {chosenRecipe: this.props.recipes[0]};
   },
   handleRecipeSelected: function(recipe) {
     this.setState({chosenRecipe: recipe})
@@ -18,7 +18,7 @@ var PlanApp = React.createClass({
   render: function() {
     return (
       <div>
-        <WeeklyList recipes={this.props.recipes} dateStr={this.props.date_str} chooseRecipe={this.handleRecipeSelected} />
+        <WeeklyList recipes={this.props.recipes} dateStr={this.props.date_str} chooseRecipe={this.handleRecipeSelected} chosenRecipe={this.state.chosenRecipe} />
         <RecipeChooser recipe={this.state.chosenRecipe} chooseRecipe={this.OnRecipeChosen} />
       </div>
       );
@@ -31,7 +31,7 @@ var WeeklyList = React.createClass({
   },
   render: function() {
     var makeListItem = function(listItem) {
-      return <WeeklyListItem chooseRecipe={this.handleItemChosen} item={listItem} />
+      return <WeeklyListItem key={listItem.id} chosen={this.props.chosenRecipe.id == listItem.id} chooseRecipe={this.handleItemChosen} item={listItem} />
     }.bind(this)
 
     var listItems = this.props.recipes.map(makeListItem)
@@ -49,9 +49,13 @@ var WeeklyListItem = React.createClass({
     this.props.chooseRecipe(this.props.item);
   },
   render: function() {
+    var spanStyle = {fontWeight: 'normal'};
+    if (this.props.chosen) {
+      spanStyle.fontWeight = 'bold';
+    }
     return (
       <li onClick={this.chooseItem}>
-        {this.props.item.name}
+        <span style={spanStyle}>{this.props.item.name}</span>
       </li>
       );
   }
