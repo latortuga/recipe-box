@@ -5,6 +5,16 @@ var PlanApp = React.createClass({
   handleRecipeSelected: function(recipe) {
     this.setState({chosenRecipe: recipe})
   },
+  updateFoundationTabs: function() {
+    // Make sure our dynamically added tabs work!
+    $(document).foundation('tab');
+  },
+  componentDidUpdate: function() {
+    this.updateFoundationTabs();
+  },
+  componentDidMount: function() {
+    this.updateFoundationTabs();
+  },
   render: function() {
     return (
       <div>
@@ -55,10 +65,6 @@ var RecipeChooser = React.createClass({
   },
   goBackHandler: function() {
     this.props.chooseRecipe(null);
-  },
-  componentDidUpdate: function() {
-    // Make sure our dynamically added tabs work!
-    $(document).foundation('tab');
   },
   render: function() {
     return (
