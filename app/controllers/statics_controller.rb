@@ -6,7 +6,7 @@ class StaticsController < ApplicationController
     end_date = start_date + 7.days
     @data = {
       recipes: @recipes,
-      recipes_url: recipes_url(format: :json),
+      recipes_url: recipes_url,
       date_str: "#{start_date.strftime("%b %-d")} - #{end_date.strftime("%b %-d")}",
     }.to_json
 
@@ -17,9 +17,9 @@ class StaticsController < ApplicationController
   def shop
     @data = {
       items: Item.unarchived,
-      url: items_url(format: :json),
-      archive_complete_url: archive_complete_items_url(format: :json),
-      archive_all_url: archive_all_items_url(format: :json),
+      url: items_url,
+      archive_complete_url: archive_complete_items_url,
+      archive_all_url: archive_all_items_url,
       poll_interval: 10_000,
     }.to_json
   end
