@@ -136,15 +136,15 @@ var RecipeChooser = React.createClass({
 var RecipeForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
-    var name = this.refs.name.getDOMNode().value.trim();
-    var desc = this.refs.description.getDOMNode().value;
-    if (!name) {
+    var name = React.findDOMNode(this.refs.name);
+    var desc = React.findDOMNode(this.refs.description);
+    if (!name.value) {
       return;
     }
 
-    this.props.onRecipeCreated({ name: name, description: desc });
-    this.refs.name.getDOMNode().value = '';
-    this.refs.description.getDOMNode().value = '';
+    this.props.onRecipeCreated({ name: name.value.trim(), description: desc });
+    name.value = '';
+    desc.value = '';
   },
   render: function() {
     return (
@@ -167,11 +167,10 @@ var RecipeSearch = React.createClass({
   },
   handleSearchSubmit: function(e) {
     e.preventDefault();
-    var searchButton = this.refs.searchButton.getDOMNode();
+    var searchButton = React.findDOMNode(this.refs.searchButton);
     searchButton.disabled = true;
 
-    var searchText = this.refs.search.getDOMNode().value;
-    console.log(searchText)
+    var searchText = React.findDOMNode(this.refs.search);
     searchButton.disabled = false;
   },
   render: function() {
