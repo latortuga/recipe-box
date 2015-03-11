@@ -14,5 +14,5 @@ Take meal list and copy ingredients for chosen recipes to grocery list.
 Display grocery list and allow toggling found items.
 
 ### Use Case 4: Cooking
-Show recipe with notes, url, ingredients
+Show recipe with notes, url, ingredients.
 
