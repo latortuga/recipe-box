@@ -55,6 +55,7 @@ var PlanApp = React.createClass({
 
         <RecipeChooser
           create_recipe_url={this.props.recipes_url}
+          search_url={this.props.search_url}
           recipe={this.state.chosenRecipe}
           onRecipeCreated={this.handleRecipeCreated} />
       </div>
@@ -123,7 +124,7 @@ var RecipeChooser = React.createClass({
             <li className="tab-title"><a href='#newPane'>New</a></li>
           </ul>
           <div className="tabs-content">
-            <RecipeSearch />
+            <RecipeSearch search_url={this.props.search_url} />
             <PopularChoices />
             <RecipeForm onRecipeCreated={this.props.onRecipeCreated} />
           </div>
@@ -172,6 +173,16 @@ var RecipeSearch = React.createClass({
 
     var searchText = React.findDOMNode(this.refs.search);
     searchButton.disabled = false;
+
+    $.ajax({
+      url: this.props.search_url,
+      method: 'GET',
+      dataType: 'json',
+      data: { q: searchText.value },
+      success: function(data) {
+        this.setState({results: data});
+      }.bind(this),
+    });
   },
   render: function() {
     return (
@@ -180,7 +191,7 @@ var RecipeSearch = React.createClass({
           <input type="text" ref="search" />
           <input type="submit" ref="searchButton" value="Search" className="button" />
         </form>
-        <ResultList />
+        <ResultList results={this.state.results} />
       </div>
       );
   }
@@ -188,10 +199,14 @@ var RecipeSearch = React.createClass({
 
 var ResultList = React.createClass({
   render: function() {
-    var resultItems = this.props.results
+    var makeResult = function(result) {
+      return <li>{result.name}</li>;
+    }.bind(this)
+
+    var results = this.props.results.map(makeResult)
     return (
       <ul>
-        {resultItems}
+        {results}
       </ul>
       );
   }
