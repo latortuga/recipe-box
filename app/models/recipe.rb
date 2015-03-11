@@ -1,5 +1,5 @@
 class Recipe < ActiveRecord::Base
   def self.search(query)
-    # TODO implement with test
+    where(name: query)
   end
 end
