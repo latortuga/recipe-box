@@ -7,6 +7,7 @@ class StaticsController < ApplicationController
     @data = {
       recipes: @recipes,
       recipes_url: recipes_url,
+      search_url: search_recipes_url,
       date_str: "#{start_date.strftime("%b %-d")} - #{end_date.strftime("%b %-d")}",
     }.to_json
 
