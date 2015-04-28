@@ -14,4 +14,11 @@ class RecipeTest < ActiveSupport::TestCase
     results = Recipe.search('123')
     assert_includes results, r
   end
+
+  def test_search_is_not_case_sensitive
+    r = Recipe.create(name: 'Testing 123')
+
+    results = Recipe.search('test')
+    assert_includes results, r
+  end
 end
