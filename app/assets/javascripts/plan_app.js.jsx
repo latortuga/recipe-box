@@ -18,9 +18,19 @@ var PlanApp = React.createClass({
   componentDidMount: function() {
     this.updateFoundationTabs();
   },
-  handleRecipeCreated: function() {
-    this.loadRecipes();
+
+  handleRecipeUpdated: function(recipe) {
+    $.ajax({
+      url: this.props.recipes_url + '/' + recipe.id,
+      method: 'PUT',
+      dataType: 'json',
+      data: { recipe: recipe },
+      success: function() {
+        this.loadRecipes();
+      }.bind(this),
+    });
   },
+
   handleRecipeCreated: function(newRecipe) {
     $.ajax({
       url: this.props.recipes_url,
@@ -32,15 +42,26 @@ var PlanApp = React.createClass({
       }.bind(this),
     });
   },
+  refreshRecipes: function(newRecipes) {
+    var id = this.state.chosenRecipe.id;
+    var newChoice = null;
+    newRecipes.forEach(function(recipe) {
+      if (recipe.id == id) {
+        newChoice = recipe;
+      }
+    })
+    this.setState({
+      recipes: newRecipes,
+      chosenRecipe: newChoice,
+    });
+  },
+
   loadRecipes: function() {
     $.ajax({
       url: this.props.recipes_url,
       dataType: 'json',
       success: function(data) {
-        this.setState({
-          recipes: data,
-          chosenRecipe: this.state.chosenRecipe,
-        });
+        this.refreshRecipes(data);
       }.bind(this)
     });
   },
@@ -51,6 +72,7 @@ var PlanApp = React.createClass({
           recipes={this.state.recipes}
           dateStr={this.props.date_str}
           onRecipeChosen={this.handleRecipeSelected}
+          onRecipeUpdated={this.handleRecipeUpdated}
           chosenRecipe={this.state.chosenRecipe} />
 
         <RecipeChooser
@@ -85,7 +107,7 @@ var WeeklyList = React.createClass({
           <ul> {listItems} </ul>
         </div>
         <div className="panel large-6 columns right">
-          <RecipeInspector recipe={this.props.chosenRecipe} />
+          <RecipeInspector recipe={this.props.chosenRecipe} onRecipeUpdated={this.props.onRecipeUpdated} />
         </div>
       </div>
       );
@@ -139,13 +161,19 @@ var RecipeForm = React.createClass({
     e.preventDefault();
     var name = React.findDOMNode(this.refs.name);
     var desc = React.findDOMNode(this.refs.description);
+    var url = React.findDOMNode(this.refs.url);
     if (!name.value) {
       return;
     }
 
-    this.props.onRecipeCreated({ name: name.value.trim(), description: desc });
+    this.props.onRecipeCreated({
+      name: name.value.trim(),
+      description: desc.value,
+      url: url.value
+    });
     name.value = '';
     desc.value = '';
+    url.value = '';
   },
   render: function() {
     return (
@@ -153,6 +181,8 @@ var RecipeForm = React.createClass({
         <form onSubmit={this.handleSubmit}>
           <label>Name</label>
           <input type="text" ref="name" />
+          <label>URL</label>
+          <input type="text" ref="url" />
           <label>Description</label>
           <textarea ref="description" />
           <input type="submit" value="Save" className="button" />
