@@ -33,7 +33,6 @@ var RecipeInspector = React.createClass({
     name.value = '';
     desc.value = '';
     url.value = '';
-    //this.setState({editing: false, recipe: updates});
   },
 
   render: function() {
