@@ -2,19 +2,24 @@ var PlanApp = React.createClass({
   getInitialState: function() {
     return {recipes: this.props.recipes, chosenRecipe: this.props.recipes[0]};
   },
+
   handleRecipeSelected: function(recipe) {
     this.setState({chosenRecipe: recipe})
   },
+
   updateFoundationTabs: function() {
     // Make sure our dynamically added tabs work!
     $(document).foundation('tab');
   },
+
   componentDidUpdate: function() {
     this.updateFoundationTabs();
   },
+
   componentWillMount: function() {
     this.loadRecipes();
   },
+
   componentDidMount: function() {
     this.updateFoundationTabs();
   },
@@ -42,6 +47,7 @@ var PlanApp = React.createClass({
       }.bind(this),
     });
   },
+
   refreshRecipes: function(newRecipes) {
     var id = this.state.chosenRecipe.id;
     var newChoice = null;
@@ -65,6 +71,7 @@ var PlanApp = React.createClass({
       }.bind(this)
     });
   },
+
   render: function() {
     return (
       <div>
@@ -119,6 +126,7 @@ var WeeklyListItem = React.createClass({
     e.preventDefault();
     this.props.onRecipeChosen(this.props.item);
   },
+
   render: function() {
     var spanStyle = {fontWeight: 'normal'};
     if (this.props.chosen) {
@@ -136,6 +144,7 @@ var RecipeChooser = React.createClass({
   getInitialState: function() {
     return {recipe: {}};
   },
+
   render: function() {
     return (
       <div className="row">
@@ -175,6 +184,7 @@ var RecipeForm = React.createClass({
     desc.value = '';
     url.value = '';
   },
+
   render: function() {
     return (
       <div className="content" id="newPane">
@@ -196,6 +206,7 @@ var RecipeSearch = React.createClass({
   getInitialState: function() {
     return {results: []};
   },
+
   handleSearchSubmit: function(e) {
     e.preventDefault();
     var searchButton = React.findDOMNode(this.refs.searchButton);
@@ -214,6 +225,7 @@ var RecipeSearch = React.createClass({
       }.bind(this),
     });
   },
+
   render: function() {
     return (
       <div className="content active" id="searchPane">
