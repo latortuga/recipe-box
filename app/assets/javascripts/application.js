@@ -17,9 +17,9 @@
 //= require fluxxor
 //
 //= require foundation
-//= require turbolinks
 //= require react
 //= require react_ujs
+//
 //= require_tree .
 //= require_self
 
