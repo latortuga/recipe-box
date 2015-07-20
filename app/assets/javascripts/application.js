@@ -20,7 +20,10 @@
 //= require react
 //= require react_ujs
 //
-//= require_tree .
+//= require stores
+//= require components
+//= require recipe_box
+//
 //= require_self
 
 $(function(){ $(document).foundation(); });

@@ -2,10 +2,12 @@ var ShopApp = React.createClass({
   getInitialState: function() {
     return {items: this.props.items};
   },
+
   componentDidMount: function() {
     this.loadItemsFromServer();
     setInterval(this.loadItemsFromServer, this.props.poll_interval);
   },
+
   loadItemsFromServer: function() {
     $.ajax({
       url: this.props.url,
@@ -15,6 +17,7 @@ var ShopApp = React.createClass({
       }.bind(this)
     });
   },
+
   handleAddItem: function(item) {
     var newKey = (new Date()).toString();
     item.id = newKey;
@@ -31,6 +34,7 @@ var ShopApp = React.createClass({
       }.bind(this)
     });
   },
+
   handleClearDone: function() {
     $.ajax({
       url: this.props.archive_complete_url,
@@ -41,6 +45,7 @@ var ShopApp = React.createClass({
       }.bind(this),
     });
   },
+
   handleClearAll: function() {
     $.ajax({
       url: this.props.archive_all_url,
@@ -51,6 +56,7 @@ var ShopApp = React.createClass({
       }.bind(this),
     });
   },
+
   render: function() {
     return (
       <div>
@@ -73,17 +79,21 @@ var ShoppingList = React.createClass({
   getInitialState: function() {
     return {items: this.props.items};
   },
+
   componentWillReceiveProps: function(newProps) {
     this.setState({items: newProps.items});
   },
+
   handleClearDone: function(e) {
     e.preventDefault();
     this.props.onClearDone();
   },
+
   handleClearAll: function(e) {
     e.preventDefault();
     this.props.onClearAll();
   },
+
   handleUpdateItem: function(item) {
     $.ajax({
       url: this.props.url + '/' + item.id,
@@ -117,6 +127,7 @@ var ShoppingListItem = React.createClass({
   getInitialState: function() {
     return {item: this.props.item};
   },
+
   handleCheck: function(e) {
     e.preventDefault();
     var newItem = this.state.item;
@@ -124,12 +135,15 @@ var ShoppingListItem = React.createClass({
     this.setState({item: newItem});
     this.props.onItemUpdate(newItem)
   },
+
   render: function() {
     var checked = this.state.item.complete;
     var spanStyle = {paddingLeft: '10px'}
+
     if (this.state.item.complete) {
       spanStyle.textDecoration = 'line-through';
     }
+
     return (
       <li>
         <input type="checkbox" ref="complete" checked={checked} onChange={this.handleCheck}/>
@@ -148,6 +162,7 @@ var NewItemForm = React.createClass({
     this.props.onAddItem({body: body, complete: false})
     this.refs.body.getDOMNode().value = '';
   },
+
   render: function() {
     return (
       <form onSubmit={this.handleSubmit}>
