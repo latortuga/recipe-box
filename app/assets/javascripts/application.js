@@ -12,6 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
+//
+//= require lodash.min
+//= require fluxxor
+//
 //= require foundation
 //= require turbolinks
 //= require react
